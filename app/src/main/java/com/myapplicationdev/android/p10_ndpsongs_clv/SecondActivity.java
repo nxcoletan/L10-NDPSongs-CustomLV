@@ -3,6 +3,7 @@ package com.myapplicationdev.android.p10_ndpsongs_clv;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,7 +17,7 @@ public class SecondActivity extends AppCompatActivity {
 
 	ListView lv;
     ArrayList<Song> songList;
-	ArrayAdapter adapter;
+    CustomAdapter caSong;
 	String moduleCode;
 	int requestCode = 9;
     Button btn5Stars;
@@ -35,8 +36,8 @@ public class SecondActivity extends AppCompatActivity {
         songList = dbh.getAllSongs();
         dbh.close();
 
-		adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, songList);
-		lv.setAdapter(adapter);
+		caSong = new CustomAdapter(this, R.layout.row, songList);
+		lv.setAdapter(caSong);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -53,7 +54,7 @@ public class SecondActivity extends AppCompatActivity {
                 DBHelper dbh = new DBHelper(SecondActivity.this);
                 songList.clear();
                 songList.addAll(dbh.getAllSongsByStars(5));
-                adapter.notifyDataSetChanged();
+                caSong.notifyDataSetChanged();
             }
         });
     }
@@ -66,7 +67,7 @@ public class SecondActivity extends AppCompatActivity {
             songList.clear();
             songList.addAll(dbh.getAllSongs());
             dbh.close();
-            adapter.notifyDataSetChanged();
+            caSong.notifyDataSetChanged();
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
